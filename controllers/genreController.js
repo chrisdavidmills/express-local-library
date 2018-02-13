@@ -35,8 +35,8 @@ exports.genre_detail = function(req, res, next) {
 
     }, function(err, results) {
         if (err) { return next(err); }
-        if (results.genre === null) { // No results.
-            err = new Error('Genre not found');
+        if (results.genre==null) { // No results.
+            var err = new Error('Genre not found');
             err.status = 404;
             return next(err);
         }
@@ -115,7 +115,7 @@ exports.genre_delete_get = function(req, res, next) {
         },
     }, function(err, results) {
         if (err) { return next(err); }
-        if (results.genre === null) { // No results.
+        if (results.genre==null) { // No results.
             res.redirect('/catalog/genres');
         }
         // Successful, so render.
@@ -160,8 +160,8 @@ exports.genre_update_get = function(req, res, next) {
 
     Genre.findById(req.params.id, function(err, genre) {
         if (err) { return next(err); }
-        if (genre === null) { // No results.
-            err = new Error('Genre not found');
+        if (genre==null) { // No results.
+            var err = new Error('Genre not found');
             err.status = 404;
             return next(err);
         }
@@ -173,10 +173,10 @@ exports.genre_update_get = function(req, res, next) {
 
 // Handle Genre update on POST.
 exports.genre_update_post = [
-
+   
     // Validate that the name field is not empty.
     body('name', 'Genre name required').isLength({ min: 1 }).trim(),
-
+    
     // Sanitize (trim and escape) the name field.
     sanitizeBody('name').trim().escape(),
 
