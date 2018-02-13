@@ -8,12 +8,15 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var catalog = require('./routes/catalog');  //Import routes for "catalog" area of site
+var compression = require('compression');
+var helmet = require('helmet');
 
 var app = express();
+app.use(helmet());
 
 //Set up mongoose connection
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb://chrismills:arse@ds012058.mlab.com:12058/local_library2';
+var mongoDB = process.env.MONGODB_URI || 'mongodb://chrismills:arse@ds012058.mlab.com:12058/local_library2';
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
@@ -29,6 +32,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(compression()); //Compress all routes
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
